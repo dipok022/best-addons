@@ -1,0 +1,31 @@
+# ==========================================
+# 1. Dependency Engine Directories
+# ==========================================
+node_modules/
+.npm/
+package-lock.json
+
+# ==========================================
+# 2. Local Compiler & Development Caches
+# ==========================================
+.cache/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ==========================================
+# 3. Local WordPress Environment Overrides
+# ==========================================
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# ==========================================
+# 4. Source Control Explicit Tracking Exceptions
+# ==========================================
+# Ensure your source files and built distribution bundles are NEVER ignored
+!assets/src/
+!assets/dist/
