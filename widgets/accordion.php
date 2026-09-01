@@ -54,6 +54,7 @@ class Best_Addons_Accordion_Widget extends \Elementor\Widget_Base {
 			'tab_content',
 			[ 'label' => esc_html__( 'Content', 'best-addons' ), 'type' => \Elementor\Controls_Manager::WYSIWYG, 'default' => esc_html__( 'Add your content layout block.', 'best-addons' ) ]
 		);
+		
 		$this->add_control(
 			'accordion_items',
 			[
