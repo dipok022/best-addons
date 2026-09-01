@@ -19,7 +19,7 @@ class Best_Addons_Accordion_Widget extends \Elementor\Widget_Base {
    $this->start_controls_section(
 			'preset_section',
 			[
-				'label' => esc_html__( 'Layout', 'best-addons' ),
+				'label' => esc_html__( 'Accordion Layout', 'best-addons' ),
 				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -39,6 +39,43 @@ class Best_Addons_Accordion_Widget extends \Elementor\Widget_Base {
 			]
 		);
 
+		$repeater = new \Elementor\Repeater();
+
+    $repeater->add_control(
+			'tab_title',
+			[ 
+			'label' => esc_html__( 'Title', 'best-addons' ), 
+			'type' => \Elementor\Controls_Manager::TEXT, 
+			'default' => esc_html__( 'Accordion Heading', 'best-addons' ), 
+			'label_block' => true ]
+		);
+
+    $repeater->add_control(
+			'tab_content',
+			[ 'label' => esc_html__( 'Content', 'best-addons' ), 'type' => \Elementor\Controls_Manager::WYSIWYG, 'default' => esc_html__( 'Add your content layout block.', 'best-addons' ) ]
+		);
+		$this->add_control(
+			'accordion_items',
+			[
+				'label' => esc_html__( 'Items', 'best-addons' ),
+				'type' => \Elementor\Controls_Manager::REPEATER,
+				'fields' => $repeater->get_fields(),
+				'default' => [
+					[ 'tab_title' => esc_html__( 'Accordion Item', 'best-addons' ) ],
+					[ 'tab_title' => esc_html__( 'Accordion Item', 'best-addons' ) ],
+					[ 'tab_title' => esc_html__( 'Accordion Item', 'best-addons' ) ],
+				],
+				'title_field' => '{{{ tab_title }}}',
+			]
+		);
+
+		$this->add_control(
+			'layout_divider',
+			[
+				'type' => \Elementor\Controls_Manager::DIVIDER,
+			]
+		);
+
     $this->end_controls_section();
 
     $this->start_controls_section(
@@ -46,38 +83,25 @@ class Best_Addons_Accordion_Widget extends \Elementor\Widget_Base {
 			[ 'label' => esc_html__( 'Accordion', 'best-addons' ) ]
 		);
 
-    $repeater = new \Elementor\Repeater();
 
-    $repeater->add_control(
-			'tab_title',
-			[ 'label' => esc_html__( 'Title', 'best-addons' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => esc_html__( 'Accordion Heading', 'best-addons' ), 'label_block' => true ]
-		);
-
-    $repeater->add_control(
-			'tab_content',
-			[ 'label' => esc_html__( 'Content', 'best-addons' ), 'type' => \Elementor\Controls_Manager::WYSIWYG, 'default' => esc_html__( 'Add your content layout block.', 'best-addons' ) ]
-		);
-$this->add_control(
-			'accordion_items',
-			[
-				'label' => esc_html__( 'Manage Items', 'best-addons' ),
-				'type' => \Elementor\Controls_Manager::REPEATER,
-				'fields' => $repeater->get_fields(),
-				'default' => [
-					[ 'tab_title' => esc_html__( 'Accordion Item #1', 'best-addons' ) ],
-					[ 'tab_title' => esc_html__( 'Accordion Item #2', 'best-addons' ) ],
-				],
-				'title_field' => '{{{ tab_title }}}',
-			]
-		);
 		$this->end_controls_section();
 	}
 
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 		if ( empty( $settings['accordion_items'] ) ) return;
+
+		$preset = ! empty( $settings['design_preset'] )
+			? $settings['design_preset']
+			: 'preset_1';
+
+		$widget_id = $this->get_id();
 		?>
-		<div class="best-advanced-accordion">
+		<div 
+				id="best-accordion-<?php echo esc_attr( $widget_id ); ?>" 
+				class="best-advanced-accordion best-accordion-<?php echo esc_attr( $preset ); ?>"
+				data-preset="<?php echo esc_attr( $preset ); ?>"
+			>
 			<?php foreach ( $settings['accordion_items'] as $index => $item ) : 
 				$active_class = ( $index === 0 ) ? ' is-active' : '';
 				$display_style = ( $index === 0 ) ? 'style="display: block;"' : 'style="display: none;"';
