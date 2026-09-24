@@ -13,7 +13,16 @@ export default defineConfig({
           __dirname,
           "assets/src/js/advanced-accordion.js",
         ),
-        accordion: resolve(__dirname, "assets/src/js/accordion.js"),
+        "best-accordion": resolve(__dirname, "assets/src/js/best-accordion.js"),
+        // Widget Builder admin UI (loaded only in WP admin)
+        "widget-builder-admin": resolve(
+          __dirname,
+          "assets/src/js/widget-builder-admin.js",
+        ),
+        "widget-builder-list": resolve(
+          __dirname,
+          "assets/src/js/widget-builder-list.js",
+        ),
       },
       output: {
         entryFileNames: "js/[name].min.js",

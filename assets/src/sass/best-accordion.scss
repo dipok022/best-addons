@@ -1,0 +1,17 @@
+.best-advanced-accordion {
+  .best-accordion-item {
+    .best-accordion-header {
+      width: 100%;
+      color: red !important;
+      background-color: #f5f5f5 !important;
+      display: flex;
+
+      .best-accordion-icon {
+        svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+  }
+}
