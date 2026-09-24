@@ -910,7 +910,6 @@ import "../sass/widget-builder-admin.scss";
           <div class="ba-ctrl-label">${escHtml(ctrl.label || ctrl.id)}</div>
           <div class="ba-ctrl-meta">
             <code class="ba-ctrl-id">{{${ctrl.id}}}</code>
-            <span class="ba-ctrl-type-badge">${escHtml(ctrl.type)}</span>
           </div>
         </div>
         <div class="ba-ctrl-actions">
