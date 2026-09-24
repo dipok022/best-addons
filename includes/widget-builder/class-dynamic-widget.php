@@ -87,10 +87,50 @@ class Best_Addons_Dynamic_Widget extends \Elementor\Widget_Base
 		}
 
 		if ($has_custom_sections) {
-			// User-defined sections: register all controls directly,
-			// section_start/end cases handle start/end_controls_section().
+			// User-defined sections: register controls flat. Any control that
+			// lands OUTSIDE a section_start…section_end pair is auto-wrapped in
+			// its own section so Elementor never sees a control outside a section.
+			$section_open = false;
+
 			foreach ($controls as $ctrl) {
-				$this->register_single_control($ctrl);
+				$type = $ctrl['type'] ?? '';
+
+				if ($type === 'section_start') {
+					// Close any auto-wrapped section still open from before.
+					if ($section_open) {
+						$this->end_controls_section();
+					}
+					$this->register_single_control($ctrl);
+					$section_open = true;
+				} elseif ($type === 'section_end') {
+					// Only close when a section is actually open (ignore orphans).
+					if ($section_open) {
+						$this->register_single_control($ctrl);
+						$section_open = false;
+					}
+				} else {
+					// Control outside a section → auto-wrap it so Elementor
+					// doesn't throw "Cannot add a control outside of a section".
+					if (! $section_open) {
+						$tab = strtolower($ctrl['tab'] ?? 'content');
+						$this->start_controls_section(
+							'ba_auto_' . sanitize_key($ctrl['id']),
+							[
+								'label' => esc_html__('Settings', 'best-addons'),
+								'tab'   => 'style' === $tab
+									? \Elementor\Controls_Manager::TAB_STYLE
+									: \Elementor\Controls_Manager::TAB_CONTENT,
+							]
+						);
+						$section_open = true;
+					}
+					$this->register_single_control($ctrl);
+				}
+			}
+
+			// Close any dangling section still open at the end.
+			if ($section_open) {
+				$this->end_controls_section();
 			}
 			return;
 		}

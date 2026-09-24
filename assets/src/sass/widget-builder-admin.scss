@@ -578,17 +578,27 @@ $ba-transition: 0.2s ease;
     overflow-x: hidden;
 
     &.active {
-      display: block;
+      display: flex;
+      flex-direction: column;
     }
   }
 
   .ba-controls-drop-area {
+    position: relative;
+    flex: 1;
     min-height: 200px;
     padding: 16px;
 
     &.ba-drop-over {
       background: rgba($ba-accent, 0.1);
       border: 2px dashed $ba-accent;
+    }
+
+    // Control drop OUTSIDE any section → red dashed border marks the whole
+    // tab as the "new section" insert zone.
+    &.ba-drop-insert {
+      border: 2px dashed #e11d48;
+      background: rgba(225, 29, 72, 0.06);
     }
   }
 
@@ -650,7 +660,7 @@ $ba-transition: 0.2s ease;
     padding: 12px;
     margin-bottom: 8px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
     cursor: pointer;
     transition: $ba-transition;
@@ -709,26 +719,75 @@ $ba-transition: 0.2s ease;
       }
     }
 
-    .ba-remove-ctrl {
-      background: transparent;
-      border: none;
-      color: $ba-text-muted;
-      cursor: pointer;
-      padding: 4px;
-      opacity: 0;
-      transition: $ba-transition;
+    .ba-ctrl-actions {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
 
-      .dashicons {
-        font-size: 16px;
+      .ba-ctrl-up,
+      .ba-ctrl-down,
+      .ba-ctrl-duplicate,
+      .ba-ctrl-edit,
+      .ba-remove-ctrl {
+        background: transparent;
+        border: none;
+        color: $ba-text-muted;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: $ba-radius-sm;
+        line-height: 1;
+        opacity: 0;
+        visibility: hidden;
+        transition: $ba-transition;
+
+        .dashicons {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+        }
+
+        &:disabled {
+          opacity: 0.35;
+          cursor: not-allowed;
+
+          &:hover {
+            color: $ba-text-muted;
+            background: transparent;
+          }
+        }
+
+        &:hover {
+          color: #06b6d4;
+          background: rgba(6, 182, 212, 0.12);
+        }
       }
 
-      &:hover {
+      .ba-remove-ctrl:hover {
         color: $ba-accent;
+        background: rgba(225, 29, 72, 0.12);
       }
     }
 
-    &:hover .ba-remove-ctrl {
+    &:hover .ba-ctrl-actions .ba-ctrl-up,
+    &:hover .ba-ctrl-actions .ba-ctrl-down,
+    &:hover .ba-ctrl-actions .ba-ctrl-duplicate,
+    &:hover .ba-ctrl-actions .ba-ctrl-edit,
+    &:hover .ba-ctrl-actions .ba-remove-ctrl {
       opacity: 1;
+      visibility: visible;
+    }
+
+    &.ba-ctrl-dragging {
+      opacity: 0.45;
+    }
+
+    &.ba-ctrl-drop-before {
+      box-shadow: 0 -2px 0 0 #06b6d4;
+    }
+
+    &.ba-ctrl-drop-after {
+      box-shadow: 0 2px 0 0 #06b6d4;
     }
   }
 }
@@ -869,6 +928,9 @@ $ba-transition: 0.2s ease;
   flex: 1;
   display: flex;
   flex-direction: column;
+  transition:
+    flex 0.2s ease,
+    width 0.2s ease;
 
   .ba-code-tabs {
     display: flex;
@@ -896,6 +958,58 @@ $ba-transition: 0.2s ease;
         color: $ba-accent;
         border-bottom-color: $ba-accent;
       }
+    }
+
+    .ba-code-tab-spacer {
+      flex: 1;
+    }
+
+    .ba-code-tool {
+      display: flex;
+      align-items: center;
+      background: transparent;
+      border: none;
+      color: $ba-text-muted;
+      padding: 0 14px;
+      cursor: pointer;
+      transition: $ba-transition;
+
+      .dashicons {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+
+      &:hover {
+        color: $ba-accent;
+      }
+    }
+  }
+
+  &.ba-code-collapsed {
+    flex: 0 0 44px;
+    width: 44px;
+
+    .ba-code-tabs {
+      flex-direction: column;
+      align-items: stretch;
+      height: 100%;
+      border-bottom: none;
+
+      .ba-code-tab,
+      .ba-code-tab-spacer,
+      #ba-code-format {
+        display: none;
+      }
+
+      .ba-code-tool#ba-code-col-toggle {
+        padding: 10px 0;
+        justify-content: center;
+      }
+    }
+
+    .ba-code-panel {
+      display: none;
     }
   }
 
@@ -931,11 +1045,121 @@ $ba-transition: 0.2s ease;
 
     .CodeMirror {
       height: 100%;
-      background: $ba-code-bg;
+      background: #0d1117;
       color: $ba-text-primary;
       font-family: "Fira Code", "Courier New", monospace;
       font-size: 13px;
       line-height: 1.6;
+
+      .CodeMirror-gutters,
+      .CodeMirror-linenumber,
+      .CodeMirror-activeline-gutter {
+        background: #0d1117;
+      }
+
+      .CodeMirror-gutters {
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .CodeMirror-linenumber {
+        color: #4b5563;
+      }
+
+      .CodeMirror-activeline-background {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .CodeMirror-cursor {
+        border-left-color: $ba-accent;
+        border-left-width: 2px;
+      }
+
+      .CodeMirror-selected,
+      .CodeMirror-selectedtext {
+        background: rgba(225, 29, 72, 0.3);
+      }
+    }
+
+    .CodeMirror.cm-s-ba-dark {
+      color: #e6edf3;
+
+      .cm-header,
+      .cm-def {
+        color: #d2a8ff;
+      }
+
+      .cm-keyword,
+      .cm-meta {
+        color: #ff7b72;
+      }
+
+      .cm-atom,
+      .cm-number,
+      .cm-variable,
+      .cm-variable-2,
+      .cm-builtin,
+      .cm-attribute,
+      .cm-property {
+        color: #79c0ff;
+      }
+
+      .cm-tag {
+        color: #7ee787;
+      }
+
+      .cm-string,
+      .cm-string-2 {
+        color: #a5d6ff;
+      }
+
+      .cm-comment {
+        color: #8b949e;
+        font-style: italic;
+      }
+
+      .cm-operator,
+      .cm-bracket,
+      .cm-punctuation {
+        color: #e6edf3;
+      }
+
+      .cm-qualifier,
+      .cm-variable-3 {
+        color: #ffa657;
+      }
+
+      .cm-error {
+        color: #f85149;
+      }
+    }
+
+    .CodeMirror-foldgutter {
+      width: 0.9em;
+    }
+
+    .CodeMirror-foldgutter-open,
+    .CodeMirror-foldgutter-folded {
+      color: #8b949e;
+      cursor: pointer;
+    }
+
+    .CodeMirror-foldgutter-open::after {
+      content: "\25BE";
+    }
+
+    .CodeMirror-foldgutter-folded::after {
+      content: "\25B8";
+    }
+
+    .CodeMirror-foldmarker {
+      color: #58a6ff;
+      font-family: arial;
+      line-height: 0.3;
+      cursor: pointer;
+    }
+
+    .CodeMirror-lint-markers {
+      display: none;
     }
   }
 }
@@ -1033,18 +1257,31 @@ $ba-transition: 0.2s ease;
     border-radius: $ba-radius-sm;
     padding: 10px;
     transition: $ba-transition;
+    cursor: pointer;
 
     &:hover {
       background: $ba-dark-hover;
       border-color: $ba-accent;
     }
 
+    .ba-token-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
     .ba-token-label {
+      flex: 1;
+      min-width: 0;
       font-size: 11px;
       color: $ba-text-muted;
-      margin-bottom: 6px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .ba-token-code {
@@ -1055,14 +1292,13 @@ $ba-transition: 0.2s ease;
       padding: 4px 8px;
       border-radius: 3px;
       display: inline-block;
-      margin-bottom: 8px;
     }
 
     .ba-token-copy {
       background: transparent;
       border: 1px solid $ba-dark-border;
       color: $ba-text-muted;
-      padding: 4px 8px;
+      padding: 4px 6px;
       border-radius: $ba-radius-sm;
       cursor: pointer;
       font-size: 10px;
@@ -1070,17 +1306,18 @@ $ba-transition: 0.2s ease;
       align-items: center;
       gap: 4px;
       transition: $ba-transition;
-      width: 100%;
       justify-content: center;
 
-      &:hover {
-        background: $ba-accent;
-        border-color: $ba-accent;
-        color: #fff;
+      .dashicons {
+        width: 16px;
+        height: 16px;
+        font-size: 16px;
       }
 
-      .dashicons {
-        font-size: 14px;
+      &:hover {
+        color: $ba-accent;
+        border-color: $ba-accent;
+        background: rgba(225, 29, 72, 0.1);
       }
     }
   }
@@ -1459,6 +1696,12 @@ $ba-transition: 0.2s ease;
     padding: 6px 8px;
     background: rgba(139, 92, 246, 0.08);
     border-radius: $ba-radius-sm;
+    cursor: pointer;
+    transition: $ba-transition;
+
+    &:hover {
+      background: rgba(139, 92, 246, 0.18);
+    }
 
     code {
       flex: 1;
@@ -1488,6 +1731,14 @@ $ba-transition: 0.2s ease;
     display: flex;
     align-items: center;
     gap: 6px;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: $ba-transition;
+
+    &:hover {
+      background: rgba(139, 92, 246, 0.12);
+    }
 
     .ba-token-sub-label {
       font-size: 10px;
@@ -1552,4 +1803,179 @@ $ba-transition: 0.2s ease;
 .ba-control-row[data-type="section_end"] {
   border-left: 3px solid #64748b;
   background: rgba(100, 116, 139, 0.04);
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// Section Header Bars (Elementor-style grouping for section_start + section_end)
+// ──────────────────────────────────────────────────────────────────────────
+// Each section renders as a card:
+//   [collapse] [drag handle] [Section Name / {{id}}] [^ v] [lock edit dup del]
+// Child controls live (indented) in the body between section_start and end.
+// ══════════════════════════════════════════════════════════════════════════
+
+%ba-sec-btn-reset {
+  background: transparent;
+  border: none;
+  color: $ba-text-muted;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: $ba-radius-sm;
+  line-height: 1;
+  transition: $ba-transition;
+
+  .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    color: #06b6d4;
+    background: rgba(6, 182, 212, 0.12);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+
+    &:hover {
+      color: $ba-text-muted;
+      background: transparent;
+    }
+  }
+}
+
+.ba-ctrl-section {
+  margin-bottom: 10px;
+  border: 1px solid $ba-dark-border;
+  border-left: 3px solid #06b6d4;
+  border-radius: $ba-radius;
+  background: rgba(6, 182, 212, 0.04);
+  overflow: hidden;
+  transition: $ba-transition;
+
+  &.ba-sec-drop-over {
+    outline: 2px dashed #06b6d4;
+    outline-offset: 2px;
+  }
+
+  &.ba-sec-dragging {
+    opacity: 0.55;
+    border-style: dashed;
+  }
+
+  &.is-collapsed {
+    .ba-ctrl-section-body {
+      display: none;
+    }
+
+    .ba-sec-collapse-icon {
+      transform: rotate(-90deg);
+    }
+  }
+
+  &.is-locked {
+    border-left-color: #f59e0b;
+
+    .ba-ctrl-section-body {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .ba-sec-lock {
+      color: #f59e0b;
+    }
+  }
+
+  .ba-ctrl-section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 9px 12px;
+    background: rgba(6, 182, 212, 0.08);
+    border-bottom: 1px solid $ba-dark-border;
+    cursor: grab;
+    user-select: none;
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    .ba-sec-collapse {
+      @extend %ba-sec-btn-reset;
+      flex-shrink: 0;
+
+      .ba-sec-collapse-icon {
+        transition: transform $ba-transition;
+      }
+    }
+
+    .ba-sec-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .ba-sec-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: $ba-text-primary;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .ba-sec-id {
+        font-size: 10px;
+        color: #06b6d4;
+        background: rgba(6, 182, 212, 0.12);
+        padding: 1px 6px;
+        border-radius: 3px;
+        width: fit-content;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .ba-sec-actions {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
+
+      .ba-sec-up,
+      .ba-sec-down,
+      .ba-sec-lock,
+      .ba-sec-edit,
+      .ba-sec-duplicate,
+      .ba-sec-delete {
+        @extend %ba-sec-btn-reset;
+      }
+
+      .ba-sec-delete:hover {
+        color: $ba-accent;
+        background: rgba(225, 29, 72, 0.12);
+      }
+    }
+  }
+
+  .ba-ctrl-section-body {
+    padding: 10px 12px 12px;
+
+    .ba-control-row {
+      margin-bottom: 6px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    // Nested sections keep the cyan rail so group boundaries stay obvious.
+    .ba-ctrl-section {
+      margin: 6px 0 8px;
+    }
+  }
 }

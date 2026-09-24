@@ -102,7 +102,7 @@ class Best_Addons_Widget_Builder_Editor_Page
 
 		// Control type groups for the palette.
 		$palette_groups = [
-			'layout'   => ['label' => 'Layout',   'types' => ['heading', 'divider', 'hidden', 'tabs', 'section_start', 'section_end']],
+			'layout'   => ['label' => 'Layout',   'types' => ['heading', 'divider', 'hidden', 'tabs']],
 			'text'     => ['label' => 'Text',     'types' => ['text', 'textarea', 'wysiwyg', 'code']],
 			'number'   => ['label' => 'Number',   'types' => ['number', 'slider', 'dimensions']],
 			'toggle'   => ['label' => 'Toggle',   'types' => ['switcher', 'choose', 'visual_choice']],
@@ -399,6 +399,15 @@ class Best_Addons_Widget_Builder_Editor_Page
 						<button class="ba-code-tab" data-code-tab="css">CSS</button>
 						<button class="ba-code-tab" data-code-tab="js">JS</button>
 						<button class="ba-code-tab" data-code-tab="includes">INCLUDES</button>
+						<span class="ba-code-tab-spacer"></span>
+						<button type="button" class="ba-code-tool" id="ba-code-format"
+							title="<?php esc_attr_e('Auto Format (re-align indentation)', 'best-addons'); ?>">
+							<span class="dashicons dashicons-editor-alignleft"></span>
+						</button>
+						<button type="button" class="ba-code-tool" id="ba-code-col-toggle"
+							title="<?php esc_attr_e('Collapse / expand code editor', 'best-addons'); ?>">
+							<span class="dashicons dashicons-editor-contract" id="ba-code-col-toggle-icon"></span>
+						</button>
 					</div>
 
 					<!-- HTML -->
@@ -495,6 +504,7 @@ class Best_Addons_Widget_Builder_Editor_Page
 						'drag_hint'     => esc_html__('Drag controls from the left panel.', 'best-addons'),
 						'copied'        => esc_html__('Copied!', 'best-addons'),
 						'delete_ctrl'   => esc_html__('Delete this control?', 'best-addons'),
+						'delete_section' => esc_html__('Delete this entire section and its controls?', 'best-addons'),
 					],
 				], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
 			</script>
