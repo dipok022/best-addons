@@ -379,7 +379,7 @@ class Best_Addons_Widget_Builder_Editor_Page
 					</div>
 
 					<!-- Control Settings Drawer (slides up when a control row is clicked) -->
-					<div class="ba-ctrl-settings-drawer" id="ba-ctrl-settings-drawer" style="display:none;">
+					<div class="ba-ctrl-settings-drawer" id="ba-ctrl-settings-drawer">
 						<div class="ba-ctrl-settings-header">
 							<span id="ba-ctrl-settings-title"><?php esc_html_e('Control Settings', 'best-addons'); ?></span>
 							<button type="button" id="ba-ctrl-settings-close">

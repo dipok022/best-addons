@@ -399,7 +399,7 @@ import "../sass/widget-builder-admin.scss";
 
     // Control settings drawer close
     $("#ba-ctrl-settings-close").on("click", function () {
-      $("#ba-ctrl-settings-drawer").hide();
+      $("#ba-ctrl-settings-drawer").removeClass("active");
     });
   }
 
@@ -1052,7 +1052,7 @@ import "../sass/widget-builder-admin.scss";
     const unit = findUnit(buildControlTree(), index);
     if (!unit || !unit.isSection) return;
     controlsState.splice(unit.index, unit.endIndex - unit.index + 1);
-    $("#ba-ctrl-settings-drawer").hide();
+    $("#ba-ctrl-settings-drawer").removeClass("active");
     renderControls();
     updateDocsPanel();
     markUnsaved();
@@ -1180,7 +1180,7 @@ import "../sass/widget-builder-admin.scss";
   function removeControl(index) {
     controlsState.splice(index, 1);
     renderControls();
-    $("#ba-ctrl-settings-drawer").hide();
+    $("#ba-ctrl-settings-drawer").removeClass("active");
     updateDocsPanel();
     markUnsaved();
   }
@@ -1440,7 +1440,7 @@ import "../sass/widget-builder-admin.scss";
       saveControlSettings(index);
     });
 
-    $("#ba-ctrl-settings-drawer").show();
+    $("#ba-ctrl-settings-drawer").addClass("active");
   }
 
   function saveControlSettings(index) {
@@ -1484,7 +1484,7 @@ import "../sass/widget-builder-admin.scss";
     renderControls();
     updateDocsPanel();
     markUnsaved();
-    $("#ba-ctrl-settings-drawer").hide();
+    $("#ba-ctrl-settings-drawer").removeClass("active");
   }
 
   // ── Save / Export ───────────────────────────────────────────────────────
