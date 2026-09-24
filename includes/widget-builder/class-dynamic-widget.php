@@ -76,7 +76,26 @@ class Best_Addons_Dynamic_Widget extends \Elementor\Widget_Base
 			return;
 		}
 
-		// Group by tab: content / advanced / style.
+		// Check if any control is a section_start/section_end — if so, the
+		// user has manually structured their sections. Register controls flat.
+		$has_custom_sections = false;
+		foreach ($controls as $ctrl) {
+			if (in_array($ctrl['type'] ?? '', ['section_start', 'section_end'], true)) {
+				$has_custom_sections = true;
+				break;
+			}
+		}
+
+		if ($has_custom_sections) {
+			// User-defined sections: register all controls directly,
+			// section_start/end cases handle start/end_controls_section().
+			foreach ($controls as $ctrl) {
+				$this->register_single_control($ctrl);
+			}
+			return;
+		}
+
+		// Auto-group by tab: content / advanced / style.
 		$tabs = ['content' => [], 'advanced' => [], 'style' => []];
 		foreach ($controls as $ctrl) {
 			$tab = strtolower($ctrl['tab'] ?? 'content');
@@ -87,9 +106,11 @@ class Best_Addons_Dynamic_Widget extends \Elementor\Widget_Base
 		foreach ($tabs as $tab_key => $tab_controls) {
 			if (empty($tab_controls)) continue;
 
-			$tab_id = 'ba_tab_' . $tab_key;
+			$tab_id    = 'ba_tab_' . $tab_key;
 			$tab_label = ucfirst($tab_key);
-			$tab_const = $tab_key === 'style' ? \Elementor\Controls_Manager::TAB_STYLE : \Elementor\Controls_Manager::TAB_CONTENT;
+			$tab_const = $tab_key === 'style'
+				? \Elementor\Controls_Manager::TAB_STYLE
+				: \Elementor\Controls_Manager::TAB_CONTENT;
 
 			$this->start_controls_section($tab_id, [
 				'label' => esc_html($tab_label),
@@ -258,6 +279,265 @@ class Best_Addons_Dynamic_Widget extends \Elementor\Widget_Base
 					]
 				);
 				break;
+
+			// ── Layout controls ────────────────────────────────────────────
+
+			case 'heading':
+				$this->add_control($id, [
+					'label'     => esc_html($label),
+					'type'      => \Elementor\Controls_Manager::HEADING,
+					'separator' => $ctrl['separator'] ?? 'before',
+				]);
+				break;
+
+			case 'divider':
+				$this->add_control($id, [
+					'type' => \Elementor\Controls_Manager::DIVIDER,
+				]);
+				break;
+
+			case 'hidden':
+				$this->add_control($id, array_merge($base, [
+					'type' => \Elementor\Controls_Manager::HIDDEN,
+				]));
+				break;
+
+			case 'section_start':
+				// Opens a new Elementor controls section (popover-like group inside a tab).
+				$this->start_controls_section(
+					$id . '_section',
+					[
+						'label' => esc_html($label),
+						'tab'   => $ctrl['tab'] === 'style'
+							? \Elementor\Controls_Manager::TAB_STYLE
+							: \Elementor\Controls_Manager::TAB_CONTENT,
+					]
+				);
+				break;
+
+			case 'section_end':
+				$this->end_controls_section();
+				break;
+
+			// ── Code ───────────────────────────────────────────────────────
+
+			case 'code':
+				$this->add_control($id, array_merge($base, [
+					'type'     => \Elementor\Controls_Manager::CODE,
+					'language' => $ctrl['language'] ?? 'html',
+					'rows'     => $ctrl['rows'] ?? 10,
+				]));
+				break;
+
+			// ── Select2 ───────────────────────────────────────────────────
+
+			case 'select2':
+				$options = [];
+				if (! empty($ctrl['options']) && is_array($ctrl['options'])) {
+					foreach ($ctrl['options'] as $opt) {
+						$options[$opt['value'] ?? ''] = $opt['label'] ?? $opt['value'] ?? '';
+					}
+				}
+				$this->add_control($id, array_merge($base, [
+					'type'     => \Elementor\Controls_Manager::SELECT2,
+					'options'  => $options,
+					'multiple' => ! empty($ctrl['multiple']),
+					'label_block' => true,
+				]));
+				break;
+
+			// ── Visual Choice ─────────────────────────────────────────────
+
+			case 'visual_choice':
+				$options = [];
+				if (! empty($ctrl['options']) && is_array($ctrl['options'])) {
+					foreach ($ctrl['options'] as $opt) {
+						$options[$opt['value'] ?? ''] = [
+							'title' => $opt['label'] ?? $opt['value'] ?? '',
+							'icon'  => $opt['icon']  ?? 'eicon-circle',
+						];
+					}
+				}
+				$this->add_control($id, array_merge($base, [
+					'type'    => \Elementor\Controls_Manager::CHOOSE,
+					'options' => $options,
+					'toggle'  => true,
+				]));
+				break;
+
+			// ── Font ──────────────────────────────────────────────────────
+
+			case 'font':
+				$this->add_control($id, array_merge($base, [
+					'type' => \Elementor\Controls_Manager::FONT,
+				]));
+				break;
+
+			// ── Background ───────────────────────────────────────────────
+
+			case 'background':
+				$this->add_group_control(
+					\Elementor\Group_Control_Background::get_type(),
+					[
+						'name'     => $id,
+						'label'    => esc_html($label),
+						'types'    => $ctrl['types'] ?? ['classic', 'gradient'],
+						'selector' => $ctrl['selector'] ?? '{{WRAPPER}} .ba-widget-element',
+					]
+				);
+				break;
+
+			// ── Text Shadow ──────────────────────────────────────────────
+
+			case 'text_shadow':
+				$this->add_group_control(
+					\Elementor\Group_Control_Text_Shadow::get_type(),
+					[
+						'name'     => $id,
+						'label'    => esc_html($label),
+						'selector' => $ctrl['selector'] ?? '{{WRAPPER}} .ba-widget-element',
+					]
+				);
+				break;
+
+			// ── Gallery ──────────────────────────────────────────────────
+
+			case 'gallery':
+				$this->add_control($id, [
+					'label' => esc_html($label),
+					'type'  => \Elementor\Controls_Manager::GALLERY,
+				]);
+				break;
+
+			// ── Repeater ─────────────────────────────────────────────────
+
+			case 'repeater':
+				$sub_fields = $ctrl['sub_fields'] ?? [];
+				if (empty($sub_fields)) break;
+
+				$repeater = new \Elementor\Repeater();
+
+				foreach ($sub_fields as $sf) {
+					if (empty($sf['id']) || empty($sf['type'])) continue;
+
+					$sf_id      = sanitize_key($sf['id']);
+					$sf_label   = $sf['label'] ?? ucwords(str_replace('_', ' ', $sf_id));
+					$sf_default = $sf['default'] ?? '';
+					$sf_type    = $sf['type'];
+
+					switch ($sf_type) {
+						case 'text':
+							$repeater->add_control($sf_id, [
+								'label'       => esc_html($sf_label),
+								'type'        => \Elementor\Controls_Manager::TEXT,
+								'default'     => $sf_default,
+								'label_block' => true,
+							]);
+							break;
+
+						case 'textarea':
+							$repeater->add_control($sf_id, [
+								'label'       => esc_html($sf_label),
+								'type'        => \Elementor\Controls_Manager::TEXTAREA,
+								'default'     => $sf_default,
+								'label_block' => true,
+							]);
+							break;
+
+						case 'wysiwyg':
+							$repeater->add_control($sf_id, [
+								'label'   => esc_html($sf_label),
+								'type'    => \Elementor\Controls_Manager::WYSIWYG,
+								'default' => $sf_default,
+							]);
+							break;
+
+						case 'media':
+							$repeater->add_control($sf_id, [
+								'label' => esc_html($sf_label),
+								'type'  => \Elementor\Controls_Manager::MEDIA,
+							]);
+							break;
+
+						case 'url':
+							$repeater->add_control($sf_id, [
+								'label'       => esc_html($sf_label),
+								'type'        => \Elementor\Controls_Manager::URL,
+								'default'     => ['url' => $sf_default],
+								'label_block' => true,
+							]);
+							break;
+
+						case 'color':
+							$repeater->add_control($sf_id, [
+								'label'   => esc_html($sf_label),
+								'type'    => \Elementor\Controls_Manager::COLOR,
+								'default' => $sf_default,
+							]);
+							break;
+
+						case 'switcher':
+							$repeater->add_control($sf_id, [
+								'label'        => esc_html($sf_label),
+								'type'         => \Elementor\Controls_Manager::SWITCHER,
+								'default'      => $sf_default,
+								'label_on'     => esc_html__('Yes', 'best-addons'),
+								'label_off'    => esc_html__('No', 'best-addons'),
+								'return_value' => 'yes',
+							]);
+							break;
+
+						case 'select':
+							$sf_options = [];
+							if (! empty($sf['options']) && is_array($sf['options'])) {
+								foreach ($sf['options'] as $opt) {
+									$sf_options[$opt['value'] ?? ''] = $opt['label'] ?? $opt['value'] ?? '';
+								}
+							}
+							$repeater->add_control($sf_id, [
+								'label'   => esc_html($sf_label),
+								'type'    => \Elementor\Controls_Manager::SELECT,
+								'default' => $sf_default,
+								'options' => $sf_options,
+							]);
+							break;
+
+						case 'icons':
+							$repeater->add_control($sf_id, [
+								'label' => esc_html($sf_label),
+								'type'  => \Elementor\Controls_Manager::ICONS,
+							]);
+							break;
+
+						case 'number':
+							$repeater->add_control($sf_id, [
+								'label'   => esc_html($sf_label),
+								'type'    => \Elementor\Controls_Manager::NUMBER,
+								'default' => $sf_default,
+							]);
+							break;
+
+						default:
+							$repeater->add_control($sf_id, [
+								'label'       => esc_html($sf_label),
+								'type'        => \Elementor\Controls_Manager::TEXT,
+								'default'     => $sf_default,
+								'label_block' => true,
+							]);
+							break;
+					}
+				}
+
+				$this->add_control($id, [
+					'label'       => esc_html($label),
+					'type'        => \Elementor\Controls_Manager::REPEATER,
+					'fields'      => $repeater->get_controls(),
+					'default'     => [],
+					'title_field' => ! empty($sub_fields[0]['id'])
+						? '{{{ ' . esc_js($sub_fields[0]['id']) . ' }}}'
+						: '',
+				]);
+				break;
 		}
 	}
 
@@ -305,6 +585,48 @@ class Best_Addons_Dynamic_Widget extends \Elementor\Widget_Base
 
 	private function parse_tokens(string $template, array $settings): string
 	{
+		// ── Repeater loop: {% for item in control_id %}...{% endfor %} ────
+		$template = preg_replace_callback(
+			'/\{%\s*for\s+item\s+in\s+(\w+)\s*%\}(.*?)\{%\s*endfor\s*%\}/s',
+			function ($matches) use ($settings) {
+				$control_id = $matches[1];
+				$loop_body  = $matches[2];
+				$items      = $settings[$control_id] ?? [];
+				if (empty($items) || ! is_array($items)) return '';
+
+				$output = '';
+				foreach ($items as $item) {
+					$row = $loop_body;
+					// Replace {{item.sub_field_id}} tokens
+					foreach ($item as $sf_key => $sf_val) {
+						if (is_array($sf_val)) {
+							// URL sub-field
+							if (isset($sf_val['url'])) {
+								$row = str_replace('{{item.' . $sf_key . '}}', esc_url($sf_val['url']), $row);
+							}
+							// Media sub-field
+							elseif (isset($sf_val['id']) && isset($sf_val['url'])) {
+								$row = str_replace('{{item.' . $sf_key . '}}', esc_url($sf_val['url']), $row);
+							}
+							// Icon sub-field
+							elseif (isset($sf_val['value'])) {
+								ob_start();
+								\Elementor\Icons_Manager::render_icon($sf_val, ['aria-hidden' => 'true']);
+								$icon_html = ob_get_clean();
+								$row = str_replace('{{item.' . $sf_key . '}}', $icon_html, $row);
+							}
+						} else {
+							$row = str_replace('{{item.' . $sf_key . '}}', esc_html((string) $sf_val), $row);
+						}
+					}
+					$output .= $row;
+				}
+				return $output;
+			},
+			$template
+		);
+
+		// ── Scalar tokens ──────────────────────────────────────────────────
 		foreach ($settings as $key => $value) {
 			if (is_array($value)) {
 				// URL control.

@@ -269,18 +269,57 @@ import "../sass/widget-builder-admin.scss";
 
     controlsState.forEach((ctrl) => {
       if (!ctrl.id) return;
-      const token = `{{${ctrl.id}}}`;
-      const label = ctrl.label || ctrl.id;
-      const $item = $(`
-        <div class="ba-token-item">
-          <div class="ba-token-label">${escHtml(label)}</div>
-          <div class="ba-token-code">${escHtml(token)}</div>
-          <button type="button" class="ba-token-copy" data-token="${escAttr(token)}" title="Copy">
-            <span class="dashicons dashicons-admin-page"></span>
-          </button>
-        </div>
-      `);
-      $tokens.append($item);
+
+      if (ctrl.type === "repeater") {
+        // Repeater: show loop hint + sub-field tokens
+        const subFields = ctrl.sub_fields || [];
+        const loopToken = `{% for item in ${ctrl.id} %}…{% endfor %}`;
+        let subTokensHtml = "";
+        subFields.forEach((sf) => {
+          if (!sf.id) return;
+          const sfToken = `{{item.${sf.id}}}`;
+          subTokensHtml += `
+            <div class="ba-token-sub-item">
+              <span class="ba-token-sub-label">${escHtml(sf.label || sf.id)}</span>
+              <code class="ba-token-sub-code">${escHtml(sfToken)}</code>
+              <button type="button" class="ba-token-copy" data-token="${escAttr(sfToken)}" title="Copy">
+                <span class="dashicons dashicons-admin-page"></span>
+              </button>
+            </div>
+          `;
+        });
+
+        const $item = $(`
+          <div class="ba-token-item ba-token-item--repeater">
+            <div class="ba-token-repeater-header">
+              <span class="dashicons dashicons-menu ba-token-repeater-icon"></span>
+              <div class="ba-token-label">${escHtml(ctrl.label || ctrl.id)}</div>
+              <span class="ba-ctrl-type-badge">repeater</span>
+            </div>
+            <div class="ba-token-loop-hint">
+              <code>${escHtml(loopToken)}</code>
+              <button type="button" class="ba-token-copy" data-token="${escAttr('{% for item in ' + ctrl.id + ' %}')}" title="Copy loop">
+                <span class="dashicons dashicons-admin-page"></span>
+              </button>
+            </div>
+            ${subFields.length ? `<div class="ba-token-sub-fields">${subTokensHtml}</div>` : '<p class="ba-token-no-subs">No sub-fields defined yet.</p>'}
+          </div>
+        `);
+        $tokens.append($item);
+      } else {
+        const token = `{{${ctrl.id}}}`;
+        const label = ctrl.label || ctrl.id;
+        const $item = $(`
+          <div class="ba-token-item">
+            <div class="ba-token-label">${escHtml(label)}</div>
+            <div class="ba-token-code">${escHtml(token)}</div>
+            <button type="button" class="ba-token-copy" data-token="${escAttr(token)}" title="Copy">
+              <span class="dashicons dashicons-admin-page"></span>
+            </button>
+          </div>
+        `);
+        $tokens.append($item);
+      }
     });
   }
 
@@ -356,7 +395,7 @@ import "../sass/widget-builder-admin.scss";
     const icon = ctrl_types[ctrl.type]?.icon || "dashicons-layout";
 
     const $row = $(`
-      <div class="ba-control-row" data-index="${index}" data-tab="${tab}">
+      <div class="ba-control-row" data-index="${index}" data-tab="${tab}" data-type="${ctrl.type}">
         <div class="ba-ctrl-icon">
           <span class="dashicons ${icon}"></span>
         </div>
@@ -391,6 +430,10 @@ import "../sass/widget-builder-admin.scss";
       const tab = $(this).data("tab");
       $(this).empty().append(`
         <div class="ba-drop-hint" id="ba-drop-hint-${tab}">
+          <button type="button" class="ba-add-section-btn" data-tab="${tab}">
+            <span class="dashicons dashicons-plus-alt2"></span>
+            Add Section
+          </button>
           <span class="dashicons dashicons-arrow-left-alt2"></span>
           <p>${l10n?.drag_hint || "Drag controls from the left panel."}</p>
         </div>
@@ -492,6 +535,157 @@ import "../sass/widget-builder-admin.scss";
       });
     }
 
+    // ── Repeater: sub-fields editor ────────────────────────────────────
+    if (ctrl.type === "repeater") {
+      const subFields = ctrl.sub_fields || [];
+
+      // Available sub-field types
+      const subFieldTypes = [
+        { value: "text",     label: "Text" },
+        { value: "textarea", label: "Textarea" },
+        { value: "media",    label: "Media (Image)" },
+        { value: "url",      label: "URL" },
+        { value: "color",    label: "Color" },
+        { value: "select",   label: "Select" },
+        { value: "switcher", label: "Switcher" },
+        { value: "icons",    label: "Icons" },
+        { value: "number",   label: "Number" },
+        { value: "wysiwyg",  label: "WYSIWYG" },
+      ];
+      const typeOptions = subFieldTypes
+        .map((t) => `<option value="${t.value}">${t.label}</option>`)
+        .join("");
+
+      // Build existing sub-field rows
+      let subFieldsHtml = "";
+      subFields.forEach((sf, si) => {
+        const optsSel = subFieldTypes
+          .map(
+            (t) =>
+              `<option value="${t.value}" ${sf.type === t.value ? "selected" : ""}>${t.label}</option>`,
+          )
+          .join("");
+        subFieldsHtml += `
+          <div class="ba-subfield-row" data-sf-index="${si}">
+            <div class="ba-subfield-row-header">
+              <span class="ba-subfield-drag dashicons dashicons-menu"></span>
+              <strong class="ba-subfield-title">${escHtml(sf.label || sf.id || "Sub-Field")}</strong>
+              <button type="button" class="ba-remove-subfield button-link-delete" title="Remove sub-field">
+                <span class="dashicons dashicons-trash"></span>
+              </button>
+            </div>
+            <div class="ba-subfield-body">
+              <div class="ba-subfield-grid">
+                <div class="ba-subfield-col">
+                  <label>Field ID</label>
+                  <input type="text" class="ba-sf-id widefat" value="${escAttr(sf.id || "")}" placeholder="e.g. item_image">
+                </div>
+                <div class="ba-subfield-col">
+                  <label>Label</label>
+                  <input type="text" class="ba-sf-label widefat" value="${escAttr(sf.label || "")}" placeholder="e.g. Item Image">
+                </div>
+                <div class="ba-subfield-col">
+                  <label>Type</label>
+                  <select class="ba-sf-type widefat">${optsSel}</select>
+                </div>
+                <div class="ba-subfield-col">
+                  <label>Default</label>
+                  <input type="text" class="ba-sf-default widefat" value="${escAttr(sf.default || "")}" placeholder="Default value">
+                </div>
+              </div>
+              <div class="ba-subfield-token-hint">
+                Token: <code>{{item.${escHtml(sf.id || "field_id")}}}</code>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      $body.append(`
+        <div class="ba-ctrl-field ba-repeater-section">
+          <label class="ba-repeater-label">
+            <span class="dashicons dashicons-menu"></span>
+            Repeater Sub-Fields
+          </label>
+          <p class="ba-field-desc">
+            Define the fields inside each repeater item.<br>
+            Use <code>{{item.field_id}}</code> in your HTML template to render sub-field values.<br>
+            Wrap with <code>{% for item in ${ctrl.id || "control_id"} %}...{% endfor %}</code> to loop.
+          </p>
+          <div class="ba-subfields-list" id="ba-ctrl-subfields-list">
+            ${subFieldsHtml}
+          </div>
+          <button type="button" class="button ba-btn-add-subfield">
+            <span class="dashicons dashicons-plus-alt2"></span> Add Sub-Field
+          </button>
+        </div>
+      `);
+
+      // Live-update token hint on ID input
+      $body.on("input", ".ba-sf-id", function () {
+        const $row = $(this).closest(".ba-subfield-row");
+        const newId = $(this).val() || "field_id";
+        $row.find(".ba-subfield-token-hint code").text(`{{item.${newId}}}`);
+        $row.find(".ba-subfield-title").text(
+          $row.find(".ba-sf-label").val() || newId,
+        );
+      });
+
+      // Live-update title on label input
+      $body.on("input", ".ba-sf-label", function () {
+        const $row = $(this).closest(".ba-subfield-row");
+        const newLabel = $(this).val() || $row.find(".ba-sf-id").val() || "Sub-Field";
+        $row.find(".ba-subfield-title").text(newLabel);
+      });
+
+      // Add sub-field
+      $body.on("click", ".ba-btn-add-subfield", function () {
+        const $list = $("#ba-ctrl-subfields-list");
+        const si = $list.children(".ba-subfield-row").length;
+        const $sf = $(`
+          <div class="ba-subfield-row" data-sf-index="${si}">
+            <div class="ba-subfield-row-header">
+              <span class="ba-subfield-drag dashicons dashicons-menu"></span>
+              <strong class="ba-subfield-title">New Sub-Field</strong>
+              <button type="button" class="ba-remove-subfield button-link-delete" title="Remove sub-field">
+                <span class="dashicons dashicons-trash"></span>
+              </button>
+            </div>
+            <div class="ba-subfield-body">
+              <div class="ba-subfield-grid">
+                <div class="ba-subfield-col">
+                  <label>Field ID</label>
+                  <input type="text" class="ba-sf-id widefat" placeholder="e.g. item_image">
+                </div>
+                <div class="ba-subfield-col">
+                  <label>Label</label>
+                  <input type="text" class="ba-sf-label widefat" placeholder="e.g. Item Image">
+                </div>
+                <div class="ba-subfield-col">
+                  <label>Type</label>
+                  <select class="ba-sf-type widefat">${typeOptions}</select>
+                </div>
+                <div class="ba-subfield-col">
+                  <label>Default</label>
+                  <input type="text" class="ba-sf-default widefat" placeholder="Default value">
+                </div>
+              </div>
+              <div class="ba-subfield-token-hint">
+                Token: <code>{{item.field_id}}</code>
+              </div>
+            </div>
+          </div>
+        `);
+        $list.append($sf);
+        $sf.find(".ba-sf-id").trigger("focus");
+      });
+
+      // Remove sub-field
+      $body.on("click", ".ba-remove-subfield", function () {
+        $(this).closest(".ba-subfield-row").remove();
+      });
+    }
+
     // Save button
     $body.append(`
       <div class="ba-ctrl-field">
@@ -530,6 +724,21 @@ import "../sass/widget-builder-admin.scss";
         }
       });
       ctrl.options = options;
+    }
+
+    // Save repeater sub-fields
+    if (ctrl.type === "repeater") {
+      const subFields = [];
+      $("#ba-ctrl-subfields-list .ba-subfield-row").each(function () {
+        const id      = $(this).find(".ba-sf-id").val().trim();
+        const label   = $(this).find(".ba-sf-label").val().trim();
+        const type    = $(this).find(".ba-sf-type").val();
+        const def     = $(this).find(".ba-sf-default").val();
+        if (id) {
+          subFields.push({ id, label, type, default: def });
+        }
+      });
+      ctrl.sub_fields = subFields;
     }
 
     reRenderControls();
@@ -687,6 +896,17 @@ import "../sass/widget-builder-admin.scss";
       if (unsavedChanges) {
         return "You have unsaved changes. Leave anyway?";
       }
+    });
+
+    // + Add Section button → adds a section_start control to that tab
+    $(document).on("click", ".ba-add-section-btn", function () {
+      const tab = $(this).data("tab");
+      addControl("section_start", tab);
+    });
+
+    // Keep topbar settings label in sync with title input
+    $(document).on("input", "#ba-widget-title-input", function () {
+      $(".ba-topbar-settings-label").text($(this).val() || "Untitled Widget");
     });
   }
 })(jQuery);

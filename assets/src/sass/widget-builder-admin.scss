@@ -4,21 +4,21 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 // ── Variables ─────────────────────────────────────────────────────────────
-$ba-dark-bg:      #1a1d2e;
-$ba-dark-panel:   #242739;
-$ba-dark-header:  #2d3047;
-$ba-dark-border:  #3a3d54;
-$ba-dark-hover:   #2f3350;
+$ba-dark-bg: #1a1d2e;
+$ba-dark-panel: #242739;
+$ba-dark-header: #2d3047;
+$ba-dark-border: #3a3d54;
+$ba-dark-hover: #2f3350;
 $ba-text-primary: #ffffff;
-$ba-text-muted:   #9ca3af;
-$ba-accent:       #e11d48;
+$ba-text-muted: #9ca3af;
+$ba-accent: #e11d48;
 $ba-accent-hover: #be123c;
-$ba-success:      #10b981;
-$ba-info:         #3b82f6;
-$ba-code-bg:      #0d1117;
-$ba-radius:       8px;
-$ba-radius-sm:    4px;
-$ba-transition:   0.2s ease;
+$ba-success: #10b981;
+$ba-info: #3b82f6;
+$ba-code-bg: #0d1117;
+$ba-radius: 8px;
+$ba-radius-sm: 4px;
+$ba-transition: 0.2s ease;
 
 // ── Reset for Full-Screen Editor ─────────────────────────────────────────
 .ba-wb-editor-body {
@@ -26,9 +26,61 @@ $ba-transition:   0.2s ease;
   padding: 0 !important;
   background: $ba-dark-bg;
   color: $ba-text-primary;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow: hidden;
   height: 100vh;
+}
+
+// ── Global Custom Scrollbar ───────────────────────────────────────────────
+// Applies to every scrollable area inside the editor.
+// Track = transparent, thumb = $ba-accent (#e11d48)
+.ba-wb-editor-body,
+.ba-palette-scroll,
+.ba-panel-tab-content,
+.ba-code-panel,
+.ba-docs-body,
+.ba-ctrl-settings-body,
+.ba-editor-col {
+  scrollbar-width: thin; // Firefox
+  scrollbar-color: $ba-accent transparent; // Firefox: thumb track
+}
+
+.ba-wb-editor-body ::-webkit-scrollbar,
+.ba-palette-scroll::-webkit-scrollbar,
+.ba-panel-tab-content::-webkit-scrollbar,
+.ba-code-panel::-webkit-scrollbar,
+.ba-docs-body::-webkit-scrollbar,
+.ba-ctrl-settings-body::-webkit-scrollbar,
+.ba-editor-col::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.ba-wb-editor-body ::-webkit-scrollbar-track,
+.ba-palette-scroll::-webkit-scrollbar-track,
+.ba-panel-tab-content::-webkit-scrollbar-track,
+.ba-code-panel::-webkit-scrollbar-track,
+.ba-docs-body::-webkit-scrollbar-track,
+.ba-ctrl-settings-body::-webkit-scrollbar-track,
+.ba-editor-col::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ba-wb-editor-body ::-webkit-scrollbar-thumb,
+.ba-palette-scroll::-webkit-scrollbar-thumb,
+.ba-panel-tab-content::-webkit-scrollbar-thumb,
+.ba-code-panel::-webkit-scrollbar-thumb,
+.ba-docs-body::-webkit-scrollbar-thumb,
+.ba-ctrl-settings-body::-webkit-scrollbar-thumb,
+.ba-editor-col::-webkit-scrollbar-thumb {
+  background-color: $ba-accent;
+  border-radius: 2px;
+}
+
+.ba-wb-editor-body ::-webkit-scrollbar-corner,
+.ba-editor-col::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 // ── Topbar ───────────────────────────────────────────────────────────────
@@ -96,17 +148,27 @@ $ba-transition:   0.2s ease;
   }
 
   .ba-topbar-settings-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 36px;
+    gap: 6px;
     height: 36px;
+    padding: 0 10px;
     border-radius: $ba-radius-sm;
     background: transparent;
     border: none;
     color: $ba-text-muted;
     cursor: pointer;
     transition: $ba-transition;
+
+    .ba-topbar-settings-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: $ba-text-primary;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
     &:hover {
       background: $ba-dark-hover;
@@ -134,11 +196,11 @@ $ba-transition:   0.2s ease;
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    
+
     &.ba-status-live {
       background: $ba-success;
     }
-    
+
     &.ba-status-draft {
       background: $ba-text-muted;
     }
@@ -337,60 +399,84 @@ $ba-transition:   0.2s ease;
 }
 
 // ── Palette Column ───────────────────────────────────────────────────────
-.ba-palette-col {
-  width: 220px;
+.ba-editor-col.ba-palette-col {
+  width: 300px !important;
+  min-width: 300px;
+  max-width: 300px;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.ba-palette-col {
+  width: 300px;
+  flex-shrink: 0;
+  overflow: hidden;
 
   .ba-palette-search-wrap {
     position: relative;
-    padding: 16px;
+    padding: 12px;
     border-bottom: 1px solid $ba-dark-border;
+    width: 100%;
+    box-sizing: border-box;
 
     .ba-palette-search {
+      display: block;
       width: 100%;
+      box-sizing: border-box;
       background: $ba-dark-bg;
       border: 1px solid $ba-dark-border;
       color: $ba-text-primary;
-      padding: 8px 12px 8px 36px;
+      padding: 8px 12px 8px 34px;
       border-radius: $ba-radius-sm;
-      font-size: 13px;
+      font-size: 12px;
+      min-width: 0;
 
       &:focus {
         outline: none;
         border-color: $ba-accent;
       }
+
+      &::placeholder {
+        color: $ba-text-muted;
+      }
     }
 
     .ba-palette-search-icon {
       position: absolute;
-      left: 28px;
+      left: 22px;
       top: 50%;
       transform: translateY(-50%);
       color: $ba-text-muted;
-      font-size: 16px;
+      font-size: 15px;
+      pointer-events: none;
     }
   }
 
   .ba-palette-scroll {
-    padding: 16px;
+    padding: 12px;
+    height: calc(100vh - 60px - 49px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    width: 100%;
   }
 
   .ba-palette-group {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 
     .ba-palette-group-title {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: $ba-text-muted;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .ba-palette-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
+      gap: 7px;
     }
   }
 
@@ -398,13 +484,15 @@ $ba-transition:   0.2s ease;
     background: $ba-dark-bg;
     border: 1px solid $ba-dark-border;
     border-radius: $ba-radius-sm;
-    padding: 12px 8px;
+    padding: 16px 4px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     cursor: grab;
     transition: $ba-transition;
+    box-sizing: border-box;
+    min-width: 0;
 
     &:hover {
       background: $ba-dark-hover;
@@ -417,20 +505,25 @@ $ba-transition:   0.2s ease;
     }
 
     .dashicons {
-      font-size: 20px;
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
       color: $ba-text-primary;
     }
 
     .ba-palette-item-label {
-      font-size: 10px;
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
       color: $ba-text-muted;
       text-align: center;
       line-height: 1.2;
+      word-break: break-word;
+      width: 100%;
     }
   }
 }
-
-
 
 // ── Controls Column ───────────────────────────────────────────────────────
 .ba-controls-col {
@@ -480,7 +573,9 @@ $ba-transition:   0.2s ease;
   .ba-panel-tab-content {
     display: none;
     flex: 1;
+    height: calc(100vh - 60px - 49px); // topbar + panel-tabs row
     overflow-y: auto;
+    overflow-x: hidden;
 
     &.active {
       display: block;
@@ -505,6 +600,35 @@ $ba-transition:   0.2s ease;
     padding: 40px 20px;
     text-align: center;
     color: $ba-text-muted;
+    gap: 10px;
+
+    .ba-add-section-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: $ba-accent;
+      color: #fff;
+      border: none;
+      border-radius: $ba-radius;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: $ba-transition;
+      margin-bottom: 4px;
+
+      .dashicons {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        opacity: 1;
+        margin-bottom: 0;
+      }
+
+      &:hover {
+        background: $ba-accent-hover;
+      }
+    }
 
     .dashicons {
       font-size: 48px;
@@ -740,7 +864,6 @@ $ba-transition:   0.2s ease;
   }
 }
 
-
 // ── Code Column ───────────────────────────────────────────────────────────
 .ba-code-col {
   flex: 1;
@@ -780,6 +903,9 @@ $ba-transition:   0.2s ease;
     display: none;
     flex: 1;
     background: $ba-code-bg;
+    height: calc(100vh - 60px - 41px); // topbar + code-tabs row
+    overflow-y: auto;
+    overflow-x: hidden;
 
     &.active {
       display: block;
@@ -793,7 +919,7 @@ $ba-transition:   0.2s ease;
       color: $ba-text-primary;
       border: none;
       padding: 16px;
-      font-family: 'Fira Code', 'Courier New', monospace;
+      font-family: "Fira Code", "Courier New", monospace;
       font-size: 13px;
       line-height: 1.6;
       resize: none;
@@ -807,7 +933,7 @@ $ba-transition:   0.2s ease;
       height: 100%;
       background: $ba-code-bg;
       color: $ba-text-primary;
-      font-family: 'Fira Code', 'Courier New', monospace;
+      font-family: "Fira Code", "Courier New", monospace;
       font-size: 13px;
       line-height: 1.6;
     }
@@ -868,6 +994,7 @@ $ba-transition:   0.2s ease;
 .ba-docs-col {
   width: 280px;
   flex-shrink: 0;
+  overflow: hidden;
 
   .ba-docs-header {
     padding: 16px;
@@ -881,7 +1008,9 @@ $ba-transition:   0.2s ease;
 
   .ba-docs-body {
     padding: 16px;
+    height: calc(100vh - 60px - 49px); // topbar + docs-header row
     overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .ba-docs-empty {
@@ -1126,4 +1255,301 @@ $ba-transition:   0.2s ease;
     color: #065f46;
     border-left: 4px solid #10b981;
   }
+}
+
+// ── Repeater Sub-Fields Builder ───────────────────────────────────────────
+.ba-repeater-section {
+  .ba-repeater-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .dashicons {
+      color: $ba-accent;
+      font-size: 16px;
+    }
+  }
+
+  .ba-field-desc {
+    code {
+      background: rgba(139, 92, 246, 0.12);
+      color: #8b5cf6;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 11px;
+    }
+  }
+
+  .ba-subfields-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .ba-subfield-row {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid $ba-dark-border;
+    border-radius: $ba-radius-sm;
+    overflow: hidden;
+    transition: $ba-transition;
+
+    &:hover {
+      border-color: $ba-accent;
+    }
+
+    .ba-subfield-row-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid $ba-dark-border;
+
+      .ba-subfield-drag {
+        color: $ba-text-muted;
+        cursor: grab;
+        font-size: 14px;
+
+        &:active {
+          cursor: grabbing;
+        }
+      }
+
+      .ba-subfield-title {
+        flex: 1;
+        font-size: 12px;
+        font-weight: 600;
+        color: $ba-text-primary;
+      }
+
+      .ba-remove-subfield {
+        background: transparent;
+        border: none;
+        color: $ba-text-muted;
+        cursor: pointer;
+        padding: 2px 4px;
+        line-height: 1;
+
+        .dashicons {
+          font-size: 14px;
+        }
+
+        &:hover {
+          color: $ba-accent;
+        }
+      }
+    }
+
+    .ba-subfield-body {
+      padding: 12px;
+
+      .ba-subfield-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 8px;
+
+        .ba-subfield-col {
+          label {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            color: $ba-text-muted;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 4px;
+          }
+
+          input,
+          select {
+            width: 100%;
+            background: $ba-dark-bg;
+            border: 1px solid $ba-dark-border;
+            color: $ba-text-primary;
+            padding: 6px 8px;
+            border-radius: $ba-radius-sm;
+            font-size: 12px;
+
+            &:focus {
+              outline: none;
+              border-color: $ba-accent;
+            }
+          }
+        }
+      }
+
+      .ba-subfield-token-hint {
+        font-size: 11px;
+        color: $ba-text-muted;
+
+        code {
+          background: rgba(139, 92, 246, 0.12);
+          color: #8b5cf6;
+          padding: 2px 6px;
+          border-radius: 3px;
+          font-size: 11px;
+        }
+      }
+    }
+  }
+
+  .ba-btn-add-subfield {
+    background: transparent !important;
+    border: 1px dashed $ba-dark-border !important;
+    color: $ba-text-muted !important;
+    width: 100%;
+    text-align: center;
+    padding: 8px !important;
+    font-size: 12px !important;
+    border-radius: $ba-radius-sm !important;
+    transition: $ba-transition;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    .dashicons {
+      font-size: 14px;
+    }
+
+    &:hover {
+      border-color: $ba-accent !important;
+      color: $ba-accent !important;
+    }
+  }
+}
+
+// ── Repeater Token Cards ──────────────────────────────────────────────────
+.ba-token-item--repeater {
+  border-left: 3px solid $ba-accent !important;
+
+  .ba-token-repeater-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+
+    .ba-token-repeater-icon {
+      color: $ba-accent;
+      font-size: 14px;
+    }
+
+    .ba-token-label {
+      flex: 1;
+      margin-bottom: 0;
+      font-weight: 600;
+    }
+
+    .ba-ctrl-type-badge {
+      font-size: 9px;
+      color: $ba-text-muted;
+      text-transform: uppercase;
+      border: 1px solid $ba-dark-border;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+  }
+
+  .ba-token-loop-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    padding: 6px 8px;
+    background: rgba(139, 92, 246, 0.08);
+    border-radius: $ba-radius-sm;
+
+    code {
+      flex: 1;
+      font-size: 10px;
+      color: #8b5cf6;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ba-token-copy {
+      flex-shrink: 0;
+      width: auto;
+      padding: 3px 6px;
+    }
+  }
+
+  .ba-token-sub-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 4px;
+    border-top: 1px solid $ba-dark-border;
+  }
+
+  .ba-token-sub-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .ba-token-sub-label {
+      font-size: 10px;
+      color: $ba-text-muted;
+      min-width: 60px;
+      flex-shrink: 0;
+    }
+
+    .ba-token-sub-code {
+      flex: 1;
+      font-size: 11px;
+      color: #8b5cf6;
+      background: rgba(139, 92, 246, 0.08);
+      padding: 2px 5px;
+      border-radius: 3px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ba-token-copy {
+      flex-shrink: 0;
+      width: auto;
+      padding: 3px 6px;
+      justify-content: center;
+    }
+  }
+
+  .ba-token-no-subs {
+    font-size: 11px;
+    color: $ba-text-muted;
+    font-style: italic;
+    margin: 4px 0 0;
+    padding-top: 6px;
+    border-top: 1px solid $ba-dark-border;
+  }
+}
+
+// ── Section Start / End Palette Items ─────────────────────────────────────
+.ba-palette-item[data-type="section_start"] {
+  border-left: 3px solid #06b6d4;
+
+  .dashicons {
+    color: #06b6d4 !important;
+  }
+}
+
+.ba-palette-item[data-type="section_end"] {
+  border-left: 3px solid #64748b;
+
+  .dashicons {
+    color: #64748b !important;
+  }
+}
+
+// Control row visual for section_start / section_end
+.ba-control-row[data-type="section_start"] {
+  border-left: 3px solid #06b6d4;
+  background: rgba(6, 182, 212, 0.04);
+}
+
+.ba-control-row[data-type="section_end"] {
+  border-left: 3px solid #64748b;
+  background: rgba(100, 116, 139, 0.04);
 }
