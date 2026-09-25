@@ -1435,13 +1435,18 @@ $ba-select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
     }
 
     .ba-token-code {
-      font-size: 13px;
+      display: block;
+      max-width: 100%;
+      box-sizing: border-box;
+      font-size: 12px;
       font-family: monospace;
       color: #8b5cf6;
       background: rgba(139, 92, 246, 0.1);
       padding: 4px 8px;
       border-radius: 3px;
-      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .ba-token-copy {

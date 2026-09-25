@@ -645,7 +645,7 @@ import "../sass/widget-builder-admin.scss";
                 <span class="dashicons dashicons-admin-page"></span>
               </button>
             </div>
-            <div class="ba-token-code">${escHtml(token)}</div>
+            <div class="ba-token-code" title="${escAttr(token)}">${escHtml(token)}</div>
           </div>
         `);
         $tokens.append($item);
