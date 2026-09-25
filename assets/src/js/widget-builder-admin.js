@@ -1026,15 +1026,28 @@ import "../sass/widget-builder-admin.scss";
     markUnsaved();
   }
 
+  function makeCopyId(id, taken) {
+    const base = id || "control";
+    let n = Date.now();
+    let candidate = `${base}_copy_${n}`;
+    while (taken.has(candidate)) candidate = `${base}_copy_${++n}`;
+    return candidate;
+  }
+
+  function takenIds() {
+    return new Set(controlsState.map((c) => c.id));
+  }
+
   function duplicateSection(index) {
     const unit = findUnit(buildControlTree(), index);
     if (!unit || !unit.isSection) return;
     const block = JSON.parse(
       JSON.stringify(controlsState.slice(unit.index, unit.endIndex + 1)),
     );
-    const suffix = Date.now();
+    const taken = takenIds();
     block.forEach((c) => {
-      c.id = (c.id || "control") + "_copy" + suffix;
+      c.id = makeCopyId(c.id, taken);
+      taken.add(c.id);
       if (c.locked) c.locked = false;
       if (c.collapsed) c.collapsed = false;
     });
@@ -1114,7 +1127,7 @@ import "../sass/widget-builder-admin.scss";
     if (!ctrl) return;
     const copy = JSON.parse(JSON.stringify(ctrl));
     copy.locked = false;
-    copy.id = (ctrl.id || "control") + "_copy" + Date.now();
+    copy.id = makeCopyId(ctrl.id, takenIds());
     controlsState.splice(index + 1, 0, copy);
     renderControls();
     updateDocsPanel();
@@ -1187,7 +1200,7 @@ import "../sass/widget-builder-admin.scss";
     const ctrl = controlsState[index];
     if (!ctrl) return;
 
-    $("#ba-ctrl-settings-title").text((ctrl.label || ctrl.id) + " Settings");
+    $("#ba-ctrl-settings-title").text(ctrl.label || ctrl.id);
 
     const $body = $("#ba-ctrl-settings-body");
     $body.empty();
