@@ -1027,11 +1027,11 @@ import "../sass/widget-builder-admin.scss";
   }
 
   function makeCopyId(id, taken) {
-    const base = id || "control";
-    let n = Date.now();
-    let candidate = `${base}_copy_${n}`;
-    while (taken.has(candidate)) candidate = `${base}_copy_${++n}`;
-    return candidate;
+    const root =
+      String(id || "control").replace(/_copy_\d+$/, "") || "control";
+    let n = 1;
+    while (taken.has(`${root}_copy_${n}`)) n++;
+    return `${root}_copy_${n}`;
   }
 
   function takenIds() {
