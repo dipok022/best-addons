@@ -1002,6 +1002,11 @@ $ba-select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
       flex: 1;
     }
 
+    // Formatting only applies to code editors — hide it on the INCLUDES tab.
+    .ba-code-tab[data-code-tab="includes"].active ~ #ba-code-format {
+      display: none;
+    }
+
     .ba-code-tool {
       display: flex;
       align-items: center;
