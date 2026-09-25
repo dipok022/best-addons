@@ -485,14 +485,17 @@ import "../sass/widget-builder-admin.scss";
         "Ctrl-S": (cm) => {
           formatDoc(cm);
           showToast(l10n?.formatted || "Aligned!");
+          return true;
         },
         "Meta-S": (cm) => {
           formatDoc(cm);
           showToast(l10n?.formatted || "Aligned!");
+          return true;
         },
         "Alt-Shift-F": (cm) => {
           formatDoc(cm);
           showToast(l10n?.formatted || "Aligned!");
+          return true;
         },
         "Ctrl-F": (cm) => cm.execCommand("find"),
         "Cmd-F": (cm) => cm.execCommand("find"),
