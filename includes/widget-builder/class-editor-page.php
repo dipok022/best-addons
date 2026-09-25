@@ -400,15 +400,11 @@ class Best_Addons_Widget_Builder_Editor_Page
 						<button class="ba-code-tab" data-code-tab="js">JS</button>
 						<button class="ba-code-tab" data-code-tab="includes">INCLUDES</button>
 						<span class="ba-code-tab-spacer"></span>
-						<button type="button" class="ba-code-tool" id="ba-code-format"
-							title="<?php esc_attr_e('Auto Format (re-align indentation)', 'best-addons'); ?>">
-							<span class="dashicons dashicons-editor-alignleft"></span>
-						</button>
-						<button type="button" class="ba-code-tool" id="ba-code-col-toggle"
-							title="<?php esc_attr_e('Collapse / expand code editor', 'best-addons'); ?>">
-							<span class="dashicons dashicons-editor-contract" id="ba-code-col-toggle-icon"></span>
-						</button>
-					</div>
+<button type="button" class="ba-code-tool" id="ba-code-format"
+						title="<?php esc_attr_e('Auto Format (re-align indentation)', 'best-addons'); ?>">
+						<span class="dashicons dashicons-editor-alignleft"></span>
+					</button>
+				</div>
 
 					<!-- HTML -->
 					<div class="ba-code-panel active" id="ba-code-panel-html">

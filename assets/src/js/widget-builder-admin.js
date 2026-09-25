@@ -547,19 +547,6 @@ import "../sass/widget-builder-admin.scss";
       markUnsaved();
       showToast(l10n?.formatted || "Aligned!");
     });
-
-    // Collapse / expand the whole code editor column.
-    $("#ba-code-col-toggle").on("click", function () {
-      $("#ba-code-col").toggleClass("ba-code-collapsed");
-      $("#ba-code-col-toggle-icon").toggleClass(
-        "dashicons-editor-contract dashicons-editor-expand",
-      );
-      setTimeout(() => {
-        [htmlEditor, cssEditor, jsEditor].forEach((editor) => {
-          if (editor) editor.codemirror.refresh();
-        });
-      }, 250);
-    });
   }
 
   // ── Docs Panel ──────────────────────────────────────────────────────────
