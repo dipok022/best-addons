@@ -494,6 +494,12 @@ import "../sass/widget-builder-admin.scss";
           formatDoc(cm);
           showToast(l10n?.formatted || "Aligned!");
         },
+        "Ctrl-F": (cm) => cm.execCommand("find"),
+        "Cmd-F": (cm) => cm.execCommand("find"),
+        "Ctrl-H": (cm) => cm.execCommand("replace"),
+        "Cmd-H": (cm) => cm.execCommand("replace"),
+        "Shift-Ctrl-F": (cm) => cm.execCommand("replace"),
+        "Cmd-Alt-F": (cm) => cm.execCommand("replace"),
       },
     };
 
