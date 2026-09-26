@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../../build/manifest.schema.json",
+  "id": "advanced-accordion",
+  "type": "widget",
+  "tier": "free",
+  "title": "Advanced Accordion",
+  "description": "A clean accordion grid with a repeater of titled, collapsible content panels.",
+  "keywords": ["accordion", "toggle", "collapse", "faq", "panels"],
+  "version": "1.0.0",
+  "entry": "Widget.php",
+  "category": "free",
+  "icon": "eicon-accordion",
+  "priority": 10,
+  "assets": {
+    "style": "style.scss",
+    "script": "view.ts"
+  }
+}

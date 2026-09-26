@@ -1,0 +1,30 @@
+// Sample Box — module styles.
+
+.ba-sample-box,
+.wp-block-best-addons-sample-box {
+  box-sizing: border-box;
+  padding: 40px 30px;
+  text-align: center;
+  background: #fff0f3;
+  border: 2px dashed #e11d48;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 5%);
+  transition:
+    background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  &__title {
+    margin: 0;
+    color: #e11d48;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  &:hover {
+    background: #ffe4e6;
+    box-shadow: 0 15px 35px rgb(225 29 72 / 15%);
+    transform: translateY(-5px);
+  }
+}

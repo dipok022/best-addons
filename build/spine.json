@@ -1,0 +1,9 @@
+{
+  "$comment": "Spine entries: the plugin's own chrome, which is not a module and so never appears in manifest.json. The widget-builder bundles were removed when that module moved to master-addons/dev/js/admin/widget-builder/widget-builder-react/. This file is the single source of truth for the output names that remain; includes/Assets/SpineAssets.php mirrors them, because reading JSON on the front end to resolve an asset handle would cost more than the duplication saves.",
+  "spine": {
+    "ba-admin": {
+      "input": "assets/admin/main.tsx",
+      "comment": "React options panel: module grid, licence, settings."
+    }
+  }
+}

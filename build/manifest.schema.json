@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://best-addons.local/schemas/module.schema.json",
+  "title": "Best Addons module contract",
+  "description": "The per-folder description read by build/extract.mjs. One contract per module; every other fact is derived, never declared twice.",
+  "type": "object",
+  "required": [
+    "id",
+    "type",
+    "tier",
+    "title"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Editor-only pointer to this file. Ignored by the extractor."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 2,
+      "maxLength": 48,
+      "description": "kebab-case, unique plugin-wide. Becomes the Elementor widget name suffix, the asset handles, the dist filenames, and the options-panel toggle key."
+    },
+    "slug": {
+      "type": "string",
+      "description": "The Elementor/Gutenberg category slug to register under. Required for type=category, ignored otherwise. Must differ from `id`: `id` names the folder and the manifest entry, `slug` names the thing a widget's get_categories() returns, and the two are free to change independently.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "widget",
+        "block",
+        "category"
+      ],
+      "description": "Which registrar claims this module. Adding a surface means adding a value here and a matching registrar."
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "free",
+        "pro"
+      ],
+      "description": "free always loads. pro is dropped by ProGate unless a license is active."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "description": "Human label. Shown in the Elementor panel and the options panel."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "One line of prose for the options panel and panel search."
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 32
+      },
+      "maxItems": 12,
+      "description": "Feeds the Elementor panel's search box and the options panel filter."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Author-facing version. Diagnostics only \u2014 cache-busting uses the content hash."
+    },
+    "entry": {
+      "type": "string",
+      "default": "Widget.php",
+      "description": "The PHP class file, relative to the module folder. Its class must match the folder-derived namespace."
+    },
+    "category": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Elementor category slug. Required for type=widget. Must be declared by some type=category module."
+    },
+    "icon": {
+      "type": "string",
+      "default": "eicon-default",
+      "description": "Elementor icon class, e.g. eicon-accordion."
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999,
+      "default": 100,
+      "description": "Panel ordering. Lower sorts first."
+    },
+    "assets": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Source files, relative to the module folder. Each becomes one Vite entry and one WordPress handle. Output paths and handles are derived, never written here.",
+      "properties": {
+        "style": {
+          "type": "string",
+          "description": "Front-end stylesheet (.scss/.css). Optional."
+        },
+        "script": {
+          "type": "string",
+          "description": "Front-end behaviour (.ts/.js). Optional."
+        },
+        "editor": {
+          "type": "string",
+          "description": "Elementor-editor-only behaviour. Never enqueued on the front end."
+        }
+      }
+    }
+  }
+}

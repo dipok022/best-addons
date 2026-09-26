@@ -1,0 +1,120 @@
+// Advanced Accordion — module styles.
+//
+// Scoped to `.ba-advanced-accordion`, a class unique to this module. The previous
+// stylesheet was scoped to `#best-advanced-accordion`, an id the template emitted
+// on every instance, so a page with two accordions produced duplicate ids and only
+// the first matched.
+
+.ba-advanced-accordion {
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 5%);
+
+  .best-accordion-item {
+    border-bottom: 1px solid #e2e8f0;
+    transition: background-color 0.2s ease;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    &.is-active {
+      background-color: #fafafa;
+
+      .best-accordion-header {
+        color: #e11d48;
+      }
+
+      .best-accordion-icon::before {
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+
+      .best-accordion-icon::after {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+    }
+  }
+
+  .best-accordion-header {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px 24px;
+    color: #1e293b;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #e11d48;
+    }
+
+    // The header is a real button, so it gets a visible focus ring rather than
+    // the `outline: none` the old stylesheet used.
+    &:focus-visible {
+      outline: 2px solid #e11d48;
+      outline-offset: -2px;
+    }
+  }
+
+  .best-accordion-icon {
+    position: relative;
+    flex: 0 0 auto;
+    width: 14px;
+    height: 14px;
+    color: inherit;
+
+    &::before,
+    &::after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      content: "";
+      background-color: currentcolor;
+      transition:
+        transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.2s ease;
+    }
+
+    &::before {
+      width: 14px;
+      height: 2px;
+      transform: translate(-50%, -50%);
+    }
+
+    &::after {
+      width: 2px;
+      height: 14px;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .best-accordion-content {
+    overflow: hidden;
+
+    // The collapse animation is driven by the Web Animations API in view.ts, so
+    // it has to run against an explicit height. The UA rule for [hidden] is
+    // `display: none`, which is exactly what we want once the animation ends.
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .best-accordion-content-inner {
+    padding: 0 24px 24px;
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}

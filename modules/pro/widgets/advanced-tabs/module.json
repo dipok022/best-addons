@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../../build/manifest.schema.json",
+  "id": "advanced-tabs",
+  "type": "widget",
+  "tier": "pro",
+  "title": "Advanced Tabs",
+  "description": "Vertical or horizontal tabs with an animated indicator, per-tab icons, and keyboard navigation.",
+  "keywords": ["tabs", "tabbed", "vertical", "navigation", "panels"],
+  "version": "1.0.0",
+  "entry": "Widget.php",
+  "category": "pro",
+  "icon": "eicon-tabs",
+  "priority": 10,
+  "assets": {
+    "style": "style.scss",
+    "script": "view.ts",
+    "editor": "editor.ts"
+  }
+}

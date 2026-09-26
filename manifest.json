@@ -1,0 +1,256 @@
+{
+  "version": 2,
+  "generated": 1790401971,
+  "plugin": "1.0.0",
+  "modules": [
+    {
+      "id": "advanced-accordion",
+      "type": "widget",
+      "tier": "free",
+      "title": "Advanced Accordion",
+      "description": "A clean accordion grid with a repeater of titled, collapsible content panels.",
+      "keywords": [
+        "accordion",
+        "toggle",
+        "collapse",
+        "faq",
+        "panels"
+      ],
+      "version": "1.0.0",
+      "entry": "Widget.php",
+      "className": "Widget",
+      "class": "BestAddons\\Feature\\Free\\Widgets\\AdvancedAccordion\\Widget",
+      "file": "free/widgets/advanced-accordion/Widget.php",
+      "dir": "free/widgets/advanced-accordion",
+      "category": "free",
+      "slug": null,
+      "icon": "eicon-accordion",
+      "priority": 10,
+      "hash": "149a2b624b",
+      "assets": {
+        "style": {
+          "handle": "ba-free-advanced-accordion-style",
+          "file": "css/free-advanced-accordion-style.min.css",
+          "ver": "149a2b624b",
+          "kind": "style",
+          "source": "style.scss"
+        },
+        "script": {
+          "handle": "ba-free-advanced-accordion-script",
+          "file": "js/free-advanced-accordion-script.min.js",
+          "ver": "149a2b624b",
+          "kind": "script",
+          "source": "view.ts"
+        }
+      }
+    },
+    {
+      "id": "advanced-tabs",
+      "type": "widget",
+      "tier": "pro",
+      "title": "Advanced Tabs",
+      "description": "Vertical or horizontal tabs with an animated indicator, per-tab icons, and keyboard navigation.",
+      "keywords": [
+        "tabs",
+        "tabbed",
+        "vertical",
+        "navigation",
+        "panels"
+      ],
+      "version": "1.0.0",
+      "entry": "Widget.php",
+      "className": "Widget",
+      "class": "BestAddons\\Feature\\Pro\\Widgets\\AdvancedTabs\\Widget",
+      "file": "pro/widgets/advanced-tabs/Widget.php",
+      "dir": "pro/widgets/advanced-tabs",
+      "category": "pro",
+      "slug": null,
+      "icon": "eicon-tabs",
+      "priority": 10,
+      "hash": "4c5daac6db",
+      "assets": {
+        "style": {
+          "handle": "ba-pro-advanced-tabs-style",
+          "file": "css/pro-advanced-tabs-style.min.css",
+          "ver": "4c5daac6db",
+          "kind": "style",
+          "source": "style.scss"
+        },
+        "script": {
+          "handle": "ba-pro-advanced-tabs-script",
+          "file": "js/pro-advanced-tabs-script.min.js",
+          "ver": "4c5daac6db",
+          "kind": "script",
+          "source": "view.ts"
+        },
+        "editor": {
+          "handle": "ba-pro-advanced-tabs-editor",
+          "file": "js/pro-advanced-tabs-editor.min.js",
+          "ver": "4c5daac6db",
+          "kind": "editor",
+          "source": "editor.ts"
+        }
+      }
+    },
+    {
+      "id": "free",
+      "type": "category",
+      "tier": "free",
+      "title": "Best Addons — Free",
+      "description": "Widgets included with every install. No licence required.",
+      "keywords": [],
+      "version": "1.0.0",
+      "entry": null,
+      "className": null,
+      "class": null,
+      "file": null,
+      "dir": "free/categories/free",
+      "category": null,
+      "slug": "best-addons-free",
+      "icon": "eicon-star",
+      "priority": 10,
+      "hash": "bfec60afce",
+      "assets": {}
+    },
+    {
+      "id": "best-accordion",
+      "type": "widget",
+      "tier": "free",
+      "title": "Drifted",
+      "description": "Four design presets, vertical or horizontal layout, and click/hover triggers with single or multiple open behaviour.",
+      "keywords": [
+        "accordion",
+        "presets",
+        "tabs",
+        "faq",
+        "toggle"
+      ],
+      "version": "1.0.0",
+      "entry": "Widget.php",
+      "className": "Widget",
+      "class": "BestAddons\\Feature\\Free\\Widgets\\BestAccordion\\Widget",
+      "file": "free/widgets/best-accordion/Widget.php",
+      "dir": "free/widgets/best-accordion",
+      "category": "free",
+      "slug": null,
+      "icon": "eicon-accordion",
+      "priority": 20,
+      "hash": "7da9a0aca2",
+      "assets": {
+        "style": {
+          "handle": "ba-free-best-accordion-style",
+          "file": "css/free-best-accordion-style.min.css",
+          "ver": "7da9a0aca2",
+          "kind": "style",
+          "source": "style.scss"
+        },
+        "script": {
+          "handle": "ba-free-best-accordion-script",
+          "file": "js/free-best-accordion-script.min.js",
+          "ver": "7da9a0aca2",
+          "kind": "script",
+          "source": "view.ts"
+        }
+      }
+    },
+    {
+      "id": "pro",
+      "type": "category",
+      "tier": "pro",
+      "title": "Best Addons — Pro",
+      "description": "Widgets unlocked by a Pro licence. This category stays hidden while the licence is locked.",
+      "keywords": [],
+      "version": "1.0.0",
+      "entry": null,
+      "className": null,
+      "class": null,
+      "file": null,
+      "dir": "pro/categories/pro",
+      "category": null,
+      "slug": "best-addons-pro",
+      "icon": "eicon-star",
+      "priority": 20,
+      "hash": "44772e1137",
+      "assets": {}
+    },
+    {
+      "id": "builder",
+      "type": "category",
+      "tier": "free",
+      "title": "My Widgets",
+      "description": "Widgets created with the visual Widget Builder.",
+      "keywords": [],
+      "version": "1.0.0",
+      "entry": null,
+      "className": null,
+      "class": null,
+      "file": null,
+      "dir": "free/categories/builder",
+      "category": null,
+      "slug": "best-addons-builder",
+      "icon": "eicon-custom-insert",
+      "priority": 30,
+      "hash": "55ecc48678",
+      "assets": {}
+    },
+    {
+      "id": "sample-box",
+      "type": "block",
+      "tier": "free",
+      "title": "Sample Box",
+      "description": "A minimal titled panel, used as the reference block module and as a starting point for new ones.",
+      "keywords": [
+        "box",
+        "panel",
+        "callout",
+        "sample"
+      ],
+      "version": "1.0.0",
+      "entry": "Block.php",
+      "className": "Block",
+      "class": "BestAddons\\Feature\\Free\\Blocks\\SampleBox\\Block",
+      "file": "free/blocks/sample-box/Block.php",
+      "dir": "free/blocks/sample-box",
+      "category": "free",
+      "slug": null,
+      "icon": "eicon-info-box",
+      "priority": 30,
+      "hash": "e58f7e590f",
+      "assets": {
+        "style": {
+          "handle": "ba-free-sample-box-style",
+          "file": "css/free-sample-box-style.min.css",
+          "ver": "e58f7e590f",
+          "kind": "style",
+          "source": "style.scss"
+        },
+        "editor": {
+          "handle": "ba-free-sample-box-editor",
+          "file": "js/free-sample-box-editor.min.js",
+          "ver": "e58f7e590f",
+          "kind": "editor",
+          "source": "editor.ts"
+        }
+      }
+    }
+  ],
+  "classmap": {
+    "BestAddons\\Feature\\Free\\Blocks\\SampleBox\\Block": "modules/free/blocks/sample-box/Block.php",
+    "BestAddons\\Feature\\Free\\Widgets\\AdvancedAccordion\\Widget": "modules/free/widgets/advanced-accordion/Widget.php",
+    "BestAddons\\Feature\\Free\\Widgets\\BestAccordion\\Widget": "modules/free/widgets/best-accordion/Widget.php",
+    "BestAddons\\Feature\\Pro\\Widgets\\AdvancedTabs\\Widget": "modules/pro/widgets/advanced-tabs/Widget.php"
+  },
+  "categories": [
+    "free",
+    "pro"
+  ],
+  "stats": {
+    "modules": 7,
+    "free": 5,
+    "pro": 2,
+    "widgets": 3,
+    "blocks": 1,
+    "classes": 4,
+    "assets": 9
+  }
+}

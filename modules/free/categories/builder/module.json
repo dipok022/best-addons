@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../../build/manifest.schema.json",
+  "id": "builder",
+  "slug": "best-addons-builder",
+  "type": "category",
+  "tier": "free",
+  "title": "My Widgets",
+  "description": "Widgets created with the visual Widget Builder.",
+  "icon": "eicon-custom-insert",
+  "priority": 30
+}

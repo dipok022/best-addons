@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../../build/manifest.schema.json",
+  "id": "free",
+  "slug": "best-addons-free",
+  "type": "category",
+  "tier": "free",
+  "title": "Best Addons \u2014 Free",
+  "description": "Widgets included with every install. No licence required.",
+  "icon": "eicon-star",
+  "priority": 10
+}

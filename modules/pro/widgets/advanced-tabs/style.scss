@@ -1,0 +1,120 @@
+// Advanced Tabs — module styles.
+
+.ba-advanced-tabs {
+  --ba-tabs-accent: #e11d48;
+  --ba-tabs-border: #e2e8f0;
+  --ba-tabs-surface: #f8fafc;
+  --ba-tabs-text: #1e293b;
+
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+
+  &__list {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--ba-tabs-border);
+  }
+
+  &__tab {
+    position: relative;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    padding: 14px 22px;
+    color: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--ba-tabs-accent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ba-tabs-accent);
+      outline-offset: -2px;
+    }
+
+    &[aria-selected="true"] {
+      color: var(--ba-tabs-accent);
+    }
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+  }
+
+  &__panel {
+    padding: 24px 4px;
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.6;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  // The active indicator is a transform on a single element, so switching tabs
+  // animates rather than reflowing the list.
+  &--indicator-bar {
+    .ba-advanced-tabs__list {
+      position: relative;
+    }
+
+    .ba-advanced-tabs__list::after {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: var(--ba-tabs-indicator-width, 0px);
+      height: 2px;
+      content: "";
+      background: var(--ba-tabs-accent);
+      transform: translateX(var(--ba-tabs-indicator-x, 0px));
+      transition:
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+
+  &--indicator-pill .ba-advanced-tabs__tab[aria-selected="true"] {
+    background: var(--ba-tabs-surface);
+    border-radius: 8px;
+  }
+
+  &--vertical {
+    flex-direction: row;
+    gap: 24px;
+
+    .ba-advanced-tabs__list {
+      flex: 0 0 auto;
+      flex-direction: column;
+      border-right: 1px solid var(--ba-tabs-border);
+      border-bottom: 0;
+    }
+
+    .ba-advanced-tabs__tab {
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    &.ba-advanced-tabs--indicator-bar .ba-advanced-tabs__list::after {
+      top: var(--ba-tabs-indicator-y, 0px);
+      right: -1px;
+      bottom: auto;
+      left: auto;
+      width: 2px;
+      height: var(--ba-tabs-indicator-height, 0px);
+      transform: translateY(var(--ba-tabs-indicator-y, 0px));
+      transition:
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+}

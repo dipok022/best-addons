@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../../build/manifest.schema.json",
+  "id": "best-accordion",
+  "type": "widget",
+  "tier": "free",
+  "title": "Drifted",
+  "description": "Four design presets, vertical or horizontal layout, and click/hover triggers with single or multiple open behaviour.",
+  "keywords": [
+    "accordion",
+    "presets",
+    "tabs",
+    "faq",
+    "toggle"
+  ],
+  "version": "1.0.0",
+  "entry": "Widget.php",
+  "category": "free",
+  "icon": "eicon-accordion",
+  "priority": 20,
+  "assets": {
+    "style": "style.scss",
+    "script": "view.ts"
+  }
+}

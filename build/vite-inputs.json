@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "inputs": {
+    "free-advanced-accordion-style": "/home/pixarlabs/Local Sites/aducation/app/public/wp-content/plugins/best-addons/modules/free/widgets/advanced-accordion/style.scss",
+    "free-advanced-accordion-script": "/home/pixarlabs/Local Sites/aducation/app/public/wp-content/plugins/best-addons/modules/free/widgets/advanced-accordion/view.ts",
+    "pro-advanced-tabs-style": "/home/pixarlabs/Local Sites/aducation/app/public/wp-content/plugins/best-addons/modules/pro/widgets/advanced-tabs/style.scss",
+    "pro-advanced-tabs-script": "/home/pixarlabs/Local Sites/aducation/app/public/wp-content/plugins/best-addons/modules/pro/widgets/advanced-tabs/view.ts",
+    "pro-advanced-tabs-editor": "/home/pixarlabs/Local Sites/aducation/app/public/wp-content/plugins/best-addons/modules/pro/widgets/advanced-tabs/editor.ts",
+    "free-best-accordion-style": "/home/pixarlabs/Local Sites/aducation/app/public/wp-content/plugins/best-addons/modules/free/widgets/best-accordion/style.scss",
+    "free-best-accordion-script": "/home/pixarlabs/Local Sites/aducation/app/public/wp-content/plugins/best-addons/modules/free/widgets/best-accordion/view.ts",
+    "free-sample-box-style": "/home/pixarlabs/Local Sites/aducation/app/public/wp-content/plugins/best-addons/modules/free/blocks/sample-box/style.scss",
+    "free-sample-box-editor": "/home/pixarlabs/Local Sites/aducation/app/public/wp-content/plugins/best-addons/modules/free/blocks/sample-box/editor.ts"
+  },
+  "kinds": {
+    "free-advanced-accordion-style": "style",
+    "free-advanced-accordion-script": "script",
+    "pro-advanced-tabs-style": "style",
+    "pro-advanced-tabs-script": "script",
+    "pro-advanced-tabs-editor": "editor",
+    "free-best-accordion-style": "style",
+    "free-best-accordion-script": "script",
+    "free-sample-box-style": "style",
+    "free-sample-box-editor": "editor"
+  },
+  "handles": {
+    "free-advanced-accordion-style": "ba-free-advanced-accordion-style",
+    "free-advanced-accordion-script": "ba-free-advanced-accordion-script",
+    "pro-advanced-tabs-style": "ba-pro-advanced-tabs-style",
+    "pro-advanced-tabs-script": "ba-pro-advanced-tabs-script",
+    "pro-advanced-tabs-editor": "ba-pro-advanced-tabs-editor",
+    "free-best-accordion-style": "ba-free-best-accordion-style",
+    "free-best-accordion-script": "ba-free-best-accordion-script",
+    "free-sample-box-style": "ba-free-sample-box-style",
+    "free-sample-box-editor": "ba-free-sample-box-editor"
+  },
+  "distDirs": {
+    "style": "css",
+    "script": "js",
+    "editor": "js"
+  }
+}

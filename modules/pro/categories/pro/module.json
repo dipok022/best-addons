@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../../build/manifest.schema.json",
+  "id": "pro",
+  "slug": "best-addons-pro",
+  "type": "category",
+  "tier": "pro",
+  "title": "Best Addons — Pro",
+  "description": "Widgets unlocked by a Pro licence. This category stays hidden while the licence is locked.",
+  "icon": "eicon-star",
+  "priority": 20
+}

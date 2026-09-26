@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../../build/manifest.schema.json",
+  "id": "sample-box",
+  "type": "block",
+  "tier": "free",
+  "title": "Sample Box",
+  "description": "A minimal titled panel, used as the reference block module and as a starting point for new ones.",
+  "keywords": ["box", "panel", "callout", "sample"],
+  "version": "1.0.0",
+  "entry": "Block.php",
+  "category": "free",
+  "icon": "eicon-info-box",
+  "priority": 30,
+  "assets": {
+    "style": "style.scss",
+    "editor": "editor.ts"
+  }
+}
